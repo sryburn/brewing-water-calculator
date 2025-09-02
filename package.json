@@ -1,0 +1,47 @@
+{
+  "name": "brewing-water-calculator",
+  "version": "1.0.0",
+  "description": "Water chemistry calculator for brewing - calculates salt additions using quadratic programming",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rf dist",
+    "prepublishOnly": "npm run clean && npm run build",
+    "test": "echo \"Tests coming soon\""
+  },
+  "keywords": [
+    "brewing",
+    "water-chemistry",
+    "beer",
+    "homebrewing",
+    "water-profile",
+    "quadratic-programming",
+    "salt-additions",
+    "water-treatment"
+  ],
+  "author": "Scott Ryburn <sryburn@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sryburn/brewing-water-calculator.git"
+  },
+  "homepage": "https://github.com/sryburn/brewing-water-calculator#readme",
+  "bugs": {
+    "url": "https://github.com/sryburn/brewing-water-calculator/issues"
+  },
+  "dependencies": {
+    "quadprog": "^1.6.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}
