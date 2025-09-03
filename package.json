@@ -1,6 +1,6 @@
 {
   "name": "brewing-water-calculator",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Water chemistry calculator for brewing - calculates salt additions using quadratic programming",
   "type": "module",
   "main": "dist/index.js",
