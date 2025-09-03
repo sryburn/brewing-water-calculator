@@ -12,34 +12,34 @@ export function calculateBrewingAnalysis(profile: WaterProfile): BrewingAnalysis
   const alkalinity = profile.HCO3 * (50 / 61);
   
   // Residual Alkalinity = Alkalinity - (Ca/1.4 + Mg/1.7)
-  const residual_alkalinity = alkalinity - (profile.Ca / 1.4 + profile.Mg / 1.7);
+  const residualAlkalinity = alkalinity - (profile.Ca / 1.4 + profile.Mg / 1.7);
   
   // Sulfate/Chloride Ratio
-  const sulfate_chloride_ratio = profile.Cl > 0 ? profile.SO4 / profile.Cl : null;
+  const sulfateChlorideRatio = profile.Cl > 0 ? profile.SO4 / profile.Cl : null;
   
   // Sulfate/Chloride Balance (descriptive)
-  const sulfate_chloride_balance = getSulfateChlorideBalance(sulfate_chloride_ratio);
+  const sulfateChlorideBalance = getSulfateChlorideBalance(sulfateChlorideRatio);
   
   // Total Hardness = Ca + Mg (simple sum)
-  const total_hardness = profile.Ca + profile.Mg;
+  const totalHardness = profile.Ca + profile.Mg;
   
   // Effective Hardness = Ca/1.4 + Mg/1.7 (Palmer's formula)
   // This represents the hardness that effectively neutralizes alkalinity
-  const effective_hardness = profile.Ca / 1.4 + profile.Mg / 1.7;
+  const effectiveHardness = profile.Ca / 1.4 + profile.Mg / 1.7;
   
   // Color Range based on Residual Alkalinity
-  const color_range = getColorRange(residual_alkalinity);
+  const colorRange = getColorRange(residualAlkalinity);
   
   return {
     alkalinity: Math.round(alkalinity * 10) / 10,
-    residual_alkalinity: Math.round(residual_alkalinity * 10) / 10,
-    sulfate_chloride_ratio: sulfate_chloride_ratio !== null 
-      ? Math.round(sulfate_chloride_ratio * 100) / 100 
+    residualAlkalinity: Math.round(residualAlkalinity * 10) / 10,
+    sulfateChlorideRatio: sulfateChlorideRatio !== null 
+      ? Math.round(sulfateChlorideRatio * 100) / 100 
       : null,
-    sulfate_chloride_balance,
-    total_hardness: Math.round(total_hardness * 10) / 10,
-    effective_hardness: Math.round(effective_hardness * 10) / 10,
-    color_range
+    sulfateChlorideBalance,
+    totalHardness: Math.round(totalHardness * 10) / 10,
+    effectiveHardness: Math.round(effectiveHardness * 10) / 10,
+    colorRange
   };
 }
 
@@ -62,13 +62,13 @@ function getSulfateChlorideBalance(ratio: number | null): string {
  * Get suggested beer color range based on Residual Alkalinity
  * Practical ranges that reflect real brewing - high RA doesn't mean infinitely dark beer
  */
-function getColorRange(ra: number): string {
-  if (ra < 0) return '2-8 EBC (Pilsner)';
-  if (ra < 50) return '8-20 EBC (Pale)';
-  if (ra < 100) return '20-35 EBC (Amber)';
-  if (ra < 150) return '35-50 EBC (Brown)';
-  if (ra < 200) return '50-60 EBC (Porter)';
-  if (ra < 250) return '60-70 EBC (Stout)';
+function getColorRange(residualAlkalinity: number): string {
+  if (residualAlkalinity < 0) return '2-8 EBC (Pilsner)';
+  if (residualAlkalinity < 50) return '8-20 EBC (Pale)';
+  if (residualAlkalinity < 100) return '20-35 EBC (Amber)';
+  if (residualAlkalinity < 150) return '35-50 EBC (Brown)';
+  if (residualAlkalinity < 200) return '50-60 EBC (Porter)';
+  if (residualAlkalinity < 250) return '60-70 EBC (Stout)';
   // Very high RA indicates water may need adjustment rather than darker beer
   return '50-70 EBC (Porter/Stout)*';
 }

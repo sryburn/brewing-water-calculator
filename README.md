@@ -42,7 +42,11 @@ const targetProfile = {
 };
 
 // Calculate salt additions for 20 liters
-const result = await calculateWaterAdditions(20, baseProfile, targetProfile);
+const result = await calculateWaterAdditions({
+  volumeLiters: 20,
+  baseProfile,
+  targetProfile
+});
 
 console.log(result);
 // {
@@ -54,7 +58,7 @@ console.log(result);
 //     "Table Salt (NaCl)": 0.3,
 //     "Baking Soda (NaHCO3)": 0
 //   },
-//   calculated_profile: {
+//   calculatedProfile: {
 //     Ca: 48.2,
 //     Mg: 2.7,
 //     Na: 12.5,
@@ -70,41 +74,48 @@ console.log(result);
 //     Cl: -0.1,
 //     HCO3: 0
 //   },
-//   total_salt_weight: 2.6,
-//   brewing_analysis: {
+//   totalSaltWeight: 2.6,
+//   brewingAnalysis: {
 //     alkalinity: 41,
-//     residual_alkalinity: 5.8,
-//     sulfate_chloride_ratio: 1.5,
-//     sulfate_chloride_balance: "Slightly Bitter",
-//     total_hardness: 50.9,
-//     effective_hardness: 35.9,
-//     color_range: "8-20 EBC (Pale)"
+//     residualAlkalinity: 5.8,
+//     sulfateChlorideRatio: 1.5,
+//     sulfateChlorideBalance: "Slightly Bitter",
+//     totalHardness: 50.9,
+//     effectiveHardness: 35.9,
+//     colorRange: "8-20 EBC (Pale)"
 //   }
 // }
 ```
 
 ## API
 
-### `calculateWaterAdditions(volumeLiters, baseProfile, targetProfile)`
+### `calculateWaterAdditions(input)`
 
 Calculates the optimal salt additions to achieve a target water profile.
 
 **Parameters:**
-- `volumeLiters` (number): Volume of water in liters
-- `baseProfile` (WaterProfile): Starting water profile in ppm
-- `targetProfile` (WaterProfile): Desired water profile in ppm
+- `input` (CalculationInput): Object containing:
+  - `volumeLiters` (number): Volume of water in liters
+  - `baseProfile` (WaterProfile): Starting water profile in ppm
+  - `targetProfile` (WaterProfile): Desired water profile in ppm
 
 **Returns:** `Promise<CalculationResult>`
 - `success` (boolean): Whether calculation succeeded
 - `additions` (SaltAdditions): Grams of each salt to add
-- `calculated_profile` (WaterProfile): Achieved water profile
+- `calculatedProfile` (WaterProfile): Achieved water profile
 - `deviations` (WaterProfile): Difference from target
-- `total_salt_weight` (number): Total grams of salts
-- `brewing_analysis` (BrewingAnalysis): Brewing-specific metrics
+- `totalSaltWeight` (number): Total grams of salts
+- `brewingAnalysis` (BrewingAnalysis): Brewing-specific metrics
 
-### Water Profile Interface
+### Type Interfaces
 
 ```typescript
+interface CalculationInput {
+  volumeLiters: number;
+  baseProfile: WaterProfile;
+  targetProfile: WaterProfile;
+}
+
 interface WaterProfile {
   Ca: number;   // Calcium (ppm)
   Mg: number;   // Magnesium (ppm)

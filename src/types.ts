@@ -21,29 +21,29 @@ export interface SaltAdditions {
 }
 
 export interface CalculationInput {
-  volume_liters: number;
-  base_profile: WaterProfile;
-  target_profile: WaterProfile;
+  volumeLiters: number;
+  baseProfile: WaterProfile;
+  targetProfile: WaterProfile;
 }
 
 export interface BrewingAnalysis {
   alkalinity: number;  // ppm as CaCO3
-  residual_alkalinity: number;  // ppm
-  sulfate_chloride_ratio: number | null;  // null if Cl is 0
-  sulfate_chloride_balance: string;  // e.g., "Bitter", "Balanced"
-  total_hardness: number;  // Ca + Mg (ppm)
-  effective_hardness: number;  // Ca/1.4 + Mg/1.7 (ppm) - Palmer's formula
-  color_range: string;  // e.g., "5-12 EBC"
+  residualAlkalinity: number;  // ppm
+  sulfateChlorideRatio: number | null;  // null if Cl is 0
+  sulfateChlorideBalance: string;  // e.g., "Bitter", "Balanced"
+  totalHardness: number;  // Ca + Mg (ppm)
+  effectiveHardness: number;  // Ca/1.4 + Mg/1.7 (ppm) - Palmer's formula
+  colorRange: string;  // e.g., "5-12 EBC"
 }
 
 export interface CalculationResult {
   success: boolean;
   error?: string;
   additions: SaltAdditions;
-  calculated_profile: WaterProfile;
+  calculatedProfile: WaterProfile;
   deviations: WaterProfile;
-  total_salt_weight: number;
-  brewing_analysis: BrewingAnalysis;
+  totalSaltWeight: number;
+  brewingAnalysis: BrewingAnalysis;
 }
 
 export interface OptimizationResult {

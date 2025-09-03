@@ -11,32 +11,32 @@ import { CalculationResult, CalculationInput } from './types.js';
  */
 export async function calculateWaterAdditions(input: CalculationInput): Promise<CalculationResult> {
   const {
-    volume_liters,
-    base_profile,
-    target_profile
+    volumeLiters,
+    baseProfile,
+    targetProfile
   } = input;
 
   try {
     // Step 1: Validate inputs
-    const validation = validateInputs(volume_liters, base_profile, target_profile);
+    const validation = validateInputs(volumeLiters, baseProfile, targetProfile);
     
     if (!validation.valid) {
       return {
         success: false,
         error: `Input validation failed: ${validation.errors.join(', ')}`,
         additions: createEmptyAdditions(),
-        calculated_profile: base_profile,
+        calculatedProfile: baseProfile,
         deviations: createZeroDeviations(),
-        total_salt_weight: 0,
-        brewing_analysis: calculateBrewingAnalysis(base_profile)
+        totalSaltWeight: 0,
+        brewingAnalysis: calculateBrewingAnalysis(baseProfile)
       };
     }
 
       // Step 2: Run optimization algorithm
   const optimizationResult = await optimizeSaltAdditions(
-    volume_liters,
-    base_profile,
-    target_profile
+    volumeLiters,
+    baseProfile,
+    targetProfile
   );
 
     // Step 3: Clean up display additions (round small amounts to 0)
@@ -71,10 +71,10 @@ export async function calculateWaterAdditions(input: CalculationInput): Promise<
     return {
       success: true,
       additions: displayAdditions,  // Rounded for display
-      calculated_profile: displayProfile,  // Rounded for display but based on precise calc
+      calculatedProfile: displayProfile,  // Rounded for display but based on precise calc
       deviations: displayDeviations,  // Rounded for display but based on precise calc
-      total_salt_weight: Math.round(totalSaltWeight * 10) / 10,
-      brewing_analysis: brewingAnalysis
+      totalSaltWeight: Math.round(totalSaltWeight * 10) / 10,
+      brewingAnalysis: brewingAnalysis
     };
 
   } catch (error) {
@@ -86,10 +86,10 @@ export async function calculateWaterAdditions(input: CalculationInput): Promise<
       success: false,
       error: `Calculation error: ${errorMessage}`,
       additions: createEmptyAdditions(),
-      calculated_profile: base_profile,
+      calculatedProfile: baseProfile,
       deviations: createZeroDeviations(),
-      total_salt_weight: 0,
-      brewing_analysis: calculateBrewingAnalysis(base_profile)
+      totalSaltWeight: 0,
+      brewingAnalysis: calculateBrewingAnalysis(baseProfile)
     };
   }
 }
@@ -183,15 +183,15 @@ export function formatCalculationSummary(result: CalculationResult): string {
       .filter(([_, grams]) => grams > 0)
       .map(([salt, grams]) => `  ${salt}: ${grams.toFixed(1)}g`),
     '',
-    `Total salt weight: ${result.total_salt_weight}g`,
+    `Total salt weight: ${result.totalSaltWeight}g`,
     '',
     'Calculated Profile:',
-    `  Ca: ${result.calculated_profile.Ca} ppm`,
-    `  Mg: ${result.calculated_profile.Mg} ppm`,
-    `  Na: ${result.calculated_profile.Na} ppm`,
-    `  SO4: ${result.calculated_profile.SO4} ppm`,
-    `  Cl: ${result.calculated_profile.Cl} ppm`,
-    `  HCO3: ${result.calculated_profile.HCO3} ppm`,
+    `  Ca: ${result.calculatedProfile.Ca} ppm`,
+    `  Mg: ${result.calculatedProfile.Mg} ppm`,
+    `  Na: ${result.calculatedProfile.Na} ppm`,
+    `  SO4: ${result.calculatedProfile.SO4} ppm`,
+    `  Cl: ${result.calculatedProfile.Cl} ppm`,
+    `  HCO3: ${result.calculatedProfile.HCO3} ppm`,
   ];
 
 
@@ -203,25 +203,25 @@ export function formatCalculationSummary(result: CalculationResult): string {
  * Quick validation function for MCP parameter checking
  */
 export function validateMCPInput(args: any): { valid: boolean; error?: string } {
-  if (!args.volume_liters || typeof args.volume_liters !== 'number') {
-    return { valid: false, error: 'volume_liters is required and must be a number' };
+  if (!args.volumeLiters || typeof args.volumeLiters !== 'number') {
+    return { valid: false, error: 'volumeLiters is required and must be a number' };
   }
 
-  if (!args.base_profile || typeof args.base_profile !== 'object') {
-    return { valid: false, error: 'base_profile is required and must be an object' };
+  if (!args.baseProfile || typeof args.baseProfile !== 'object') {
+    return { valid: false, error: 'baseProfile is required and must be an object' };
   }
 
-  if (!args.target_profile || typeof args.target_profile !== 'object') {
-    return { valid: false, error: 'target_profile is required and must be an object' };
+  if (!args.targetProfile || typeof args.targetProfile !== 'object') {
+    return { valid: false, error: 'targetProfile is required and must be an object' };
   }
 
   const requiredIons = ['Ca', 'Mg', 'Na', 'SO4', 'Cl', 'HCO3'];
   for (const ion of requiredIons) {
-    if (typeof args.base_profile[ion] !== 'number') {
-      return { valid: false, error: `base_profile.${ion} is required and must be a number` };
+    if (typeof args.baseProfile[ion] !== 'number') {
+      return { valid: false, error: `baseProfile.${ion} is required and must be a number` };
     }
-    if (typeof args.target_profile[ion] !== 'number') {
-      return { valid: false, error: `target_profile.${ion} is required and must be a number` };
+    if (typeof args.targetProfile[ion] !== 'number') {
+      return { valid: false, error: `targetProfile.${ion} is required and must be a number` };
     }
   }
 
